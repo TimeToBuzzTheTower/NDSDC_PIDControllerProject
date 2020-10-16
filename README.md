@@ -7,7 +7,36 @@ The goal of the project is to implement a PIC controller in C++. This controller
 
 ## PID Control
 Sensor measurements regarding the car's position is compared to the desired position. The deviation is ascertained as the cross-track-error (cte). The CTE is thereby fed into a PID controller loop to estimate
-the necessary control output (steering wheel angle) that is required to minimize zny existing error.
+the necessary control output (steering wheel angle) that is required to minimize any existing error.
+
+Proportional component P: A proportional component would try to correct the CTE by applying a control signal of Kp * cte.
+
+Derivate component D: A derivative component which controlling the cte's rate of change can be integrated to counteract the overshooting. This is done by adding a term of Ki * (cte - prev_cte), where prev_cte is the error of the previous timestep.
+
+Integral component I: An integral component of Ki * sum(cte) is added to the control output in order to eliminate the steady state bias (where sum(cte) is the sum of all previous errors).
+
+## Implementation in Code
+The implementation of the PID controller is done in the PID.cpp and PID.h file.
+
+In the PID::UpdateError() function the P, I and D error terms are computed based on the (CTE). Then in the PID::TotalError() function the control output is calculated as the sum of the individual control terms.
+
+double output = -Kp * p_error - Kd * d_error - Ki * i_error;
+
+The control signal for steering is limited to a range between -1 and 1 as instructed.
+
+After initiation of the controller, the output is passed to the msgJson["steering_angle] which is connected to the simulator.
+
+## Adjusting the parameters of the PID
+The fine tuning of the Kp was initially done to first see its sensitivity. This was followed by the derivate factor so as to enable the vehicle drive around the track. It was seen that the vehicle was not
+always following the center. Hence the integral part was parameterized to enable the controller to follow a nice path.
+
+Many instructions online were used to find tips on manually adjusting these parameters. The final parameters are seen in the code.
+
+The controller for speed is tuned according to the steering angle error. The lower the error, the higher is the target speed. Likewise, if the error increases, the speed of the vehicle is reduced.
+
+## Remarks and Observations
+Many a times, the simulation did not run on my PC, but was executable on another computer. Furthermore, running on the UDACITY Workspace showed that the controller was more twichy than on the PC. It is clear
+that the simulation delay has a big sensitivity to the PID parameters. Hence, it is uncertain whether the PID Controller would work harmoniously on a different setup.
 
 ## Dependencies
 
