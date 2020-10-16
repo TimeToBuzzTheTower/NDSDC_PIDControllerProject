@@ -42,7 +42,7 @@ void PID::UpdateError(double cte) {
 
 void PID::SetLimit(double lower_lim, double upper_lim) {
 	lower_limit = lower_lim;
-	upper_limit = lower_lim;
+	upper_limit = upper_lim;
 }
 
 double PID::TotalError() {
@@ -59,5 +59,5 @@ double PID::TotalError() {
 			output = upper_limit;
 		}
 	}
-  return output;  // TODO: Add your total error calc here!
+	return output;  // TODO: Add your total error calc here!
 }

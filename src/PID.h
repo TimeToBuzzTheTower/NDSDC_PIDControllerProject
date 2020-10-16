@@ -32,10 +32,6 @@ class PID {
   double TotalError();
   void SetLimit(double lower_lim, double upper_lim);
 
-  double GetKp();
-  double GetKi();
-  double GetKd();
-
  private:
   /**
    * PID Errors

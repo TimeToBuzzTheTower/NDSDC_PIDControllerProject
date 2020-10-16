@@ -1,4 +1,5 @@
 #include <math.h>
+#include <cmath>
 #include <uWS/uWS.h>
 #include <iostream>
 #include <string>
@@ -8,6 +9,10 @@
 // for convenience
 using nlohmann::json;
 using std::string;
+
+#ifndef M_PI
+#define M_PI (3.14159265358979323846)
+#endif
 
 // For converting back and forth between radians and degrees.
 double target_speed;
@@ -40,7 +45,7 @@ int main() {
    */
   PID pid_speed;
   pid.Init(0.13, 0.0001, 1.8);
-  pid.SetLimit(1, -1);
+  pid.SetLimit(-1, 1);
 
   pid_speed.Init(-0.2, 0, -0.022);
   pid_speed.SetLimit(0, 1.0);
@@ -73,7 +78,7 @@ int main() {
           pid.UpdateError(cte);
           double steer_value = pid.TotalError();
 
-          if (fabs(cte) < 0.5) {
+          if (fabs(cte) < 0.6) {
               target_speed = 60;
           }
           else {
