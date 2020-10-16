@@ -30,6 +30,11 @@ class PID {
    * @output The total PID error
    */
   double TotalError();
+  void SetLimit(double lower_lim, double upper_lim);
+
+  double GetKp();
+  double GetKi();
+  double GetKd();
 
  private:
   /**
@@ -45,6 +50,10 @@ class PID {
   double Kp;
   double Ki;
   double Kd;
+
+  double lower_limit;
+  double upper_limit;
+  bool limit_output = true;
 };
 
 #endif  // PID_H
